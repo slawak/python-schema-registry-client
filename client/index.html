@@ -113,7 +113,8 @@
 <span class="sd">        headers (dict): Extra headers to add on the requests</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str: one of &#39;NONE&#39;,&#39;FULL&#39;,&#39;FORWARD&#39;, or &#39;BACKWARD&#39;</span>
+<span class="sd">        str: one of BACKWARD, BACKWARD_TRANSITIVE, FORWARD, FORWARD_TRANSITIVE,</span>
+<span class="sd">            FULL, FULL_TRANSITIVE, NONE</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        ClientError: if the request was unsuccessful or an invalid</span>
@@ -126,9 +127,11 @@
 <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">update_compatibility</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Update the compatibility level for a subject.</span>
+<span class="sd">    If subject is None, the compatibility level is global.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        level (str): ex: &#39;NONE&#39;,&#39;FULL&#39;,&#39;FORWARD&#39;, or &#39;BACKWARD&#39;</span>
+<span class="sd">        level (str): one of BACKWARD, BACKWARD_TRANSITIVE, FORWARD, FORWARD_TRANSITIVE,</span>
+<span class="sd">            FULL, FULL_TRANSITIVE, NONE</span>
 <span class="sd">        headers (dict): Extra headers to add on the requests</span>
 
 <span class="sd">    Returns:</span>
