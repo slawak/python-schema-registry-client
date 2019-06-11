@@ -17,54 +17,13 @@ Avro is used to define the data schema for a record's value. This schema describ
 </pre></div>
 
 
-<p>Let's create the serializer codec:</p>
-<div class="codehilite"><pre><span></span><span class="c1"># codecs.avro.py</span>
-<span class="kn">from</span> <span class="nn">faust.serializers.codecs</span> <span class="kn">import</span> <span class="n">Codec</span>
-
-<span class="c1"># get from the library</span>
-<span class="kn">from</span> <span class="nn">schema_registry.serializer</span> <span class="kn">import</span> <span class="n">MessageSerializer</span>
-
-
-<span class="k">class</span> <span class="nc">AvroSerializer</span><span class="p">(</span><span class="n">MessageSerializer</span><span class="p">,</span> <span class="n">Codec</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema_registry_client</span><span class="p">,</span> <span class="n">schema_subject</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="n">is_key</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">schema_registry_client</span> <span class="o">=</span> <span class="n">schema_registry_client</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">schema_subject</span> <span class="o">=</span> <span class="n">schema_subject</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">schema</span> <span class="o">=</span> <span class="n">schema</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">is_key</span> <span class="o">=</span> <span class="n">is_key</span>
-
-        <span class="n">MessageSerializer</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema_registry_client</span><span class="p">)</span>
-        <span class="n">Codec</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_loads</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
-        <span class="c1"># method available on MessageSerializer</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">decode_message</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_dumps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Given a parsed avro schema, encode a record for the given topic.  The</span>
-<span class="sd">        record is expected to be a dictionary.</span>
-
-<span class="sd">        The schema is registered with the subject of &#39;topic-value&#39;</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c1"># method available on MessageSerializer</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_record_with_schema</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">schema_subject</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="p">,</span>
-            <span class="n">obj</span><span class="p">,</span>
-            <span class="n">is_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">is_key</span><span class="p">,</span>
-        <span class="p">)</span>
-</pre></div>
-
-
-<p>Let's register the custom <code>codec serializer</code></p>
+<p>Let's register the custom <code>codec</code></p>
 <div class="codehilite"><pre><span></span><span class="c1"># codecs.codec.py</span>
 
 <span class="kn">from</span> <span class="nn">avro.schema</span> <span class="kn">import</span> <span class="n">SchemaFromJSONData</span>
-<span class="kn">from</span> <span class="nn">schema_registry.client</span> <span class="kn">import</span> <span class="n">SchemaRegistryClient</span>
 
-<span class="kn">from</span> <span class="nn">codecs.avro</span> <span class="kn">import</span> <span class="n">AvroSerializer</span>
+<span class="kn">from</span> <span class="nn">schema_registry.client</span> <span class="kn">import</span> <span class="n">SchemaRegistryClient</span>
+<span class="kn">from</span> <span class="nn">schema_registry.serializers</span> <span class="kn">import</span> <span class="n">FaustSerializer</span>
 
 <span class="c1"># create an instance of the `SchemaRegistryClient`</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">SchemaRegistryClient</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">SCHEMA_REGISTRY_URL</span><span class="p">)</span>
@@ -81,11 +40,7 @@ Avro is used to define the data schema for a record's value. This schema describ
      <span class="p">]</span>
 <span class="p">})</span>
 
-<span class="n">avro_user_serializer</span> <span class="o">=</span> <span class="n">AvroSerializer</span><span class="p">(</span>
-    <span class="n">client</span><span class="p">,</span>
-    <span class="s2">&quot;users&quot;</span><span class="p">,</span>
-    <span class="n">avro_user_schema</span>
-<span class="p">)</span>
+<span class="n">avro_user_serializer</span> <span class="o">=</span> <span class="n">FaustSerializer</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="s2">&quot;users&quot;</span><span class="p">,</span> <span class="n">avro_user_schema</span><span class="p">)</span>
 
 
 <span class="c1"># function used to register the codec</span>
@@ -144,4 +99,7 @@ Avro is used to define the data schema for a record's value. This schema describ
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;PUBLISHING ON LEADER FOR USERS APP!&#39;</span><span class="p">)</span>
     <span class="n">user</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;first_name&quot;</span><span class="p">:</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;last_name&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">}</span>
     <span class="n">await</span> <span class="n">users</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">value_serializer</span><span class="o">=</span><span class="n">avro_user_serializer</span><span class="p">)</span>
-</pre></div></article></div></div></main><footer class="md-footer"><div class="md-footer-nav"><nav class="md-footer-nav__inner md-grid"><a href="../serializer/" title="Message Serializer" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev"><div class="md-flex__cell md-flex__cell--shrink"><i class="md-icon md-icon--arrow-back md-footer-nav__button"></i></div><div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span class="md-flex__ellipsis"><span class="md-footer-nav__direction">Previous</span>Message Serializer</span></div></a><a href="../client/" title="SchemaRegistryClient Api" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next"><div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span class="md-flex__ellipsis"><span class="md-footer-nav__direction">Next</span>SchemaRegistryClient Api</span></div><div class="md-flex__cell md-flex__cell--shrink"><i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i></div></a></nav></div><div class="md-footer-meta md-typeset"><div class="md-footer-meta__inner md-grid"><div class="md-footer-copyright">powered by <a href="https://www.mkdocs.org">MkDocs</a> and <a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a></div></div></div></footer></div><script src="../assets/javascripts/application.b260a35d.js"></script><script>app.initialize({version:"1.0.4",url:{base:".."}})</script></body></html>
+</pre></div>
+
+
+<p>The full example is here[https://github.com/marcosschroh/faust-docker-compose-example/blob/master/faust-project/example/codecs/avro.py]</p></article></div></div></main><footer class="md-footer"><div class="md-footer-nav"><nav class="md-footer-nav__inner md-grid"><a href="../serializer/" title="Message Serializer" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev"><div class="md-flex__cell md-flex__cell--shrink"><i class="md-icon md-icon--arrow-back md-footer-nav__button"></i></div><div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span class="md-flex__ellipsis"><span class="md-footer-nav__direction">Previous</span>Message Serializer</span></div></a><a href="../client/" title="SchemaRegistryClient Api" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next"><div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span class="md-flex__ellipsis"><span class="md-footer-nav__direction">Next</span>SchemaRegistryClient Api</span></div><div class="md-flex__cell md-flex__cell--shrink"><i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i></div></a></nav></div><div class="md-footer-meta md-typeset"><div class="md-footer-meta__inner md-grid"><div class="md-footer-copyright">powered by <a href="https://www.mkdocs.org">MkDocs</a> and <a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a></div></div></div></footer></div><script src="../assets/javascripts/application.b260a35d.js"></script><script>app.initialize({version:"1.0.4",url:{base:".."}})</script></body></html>
