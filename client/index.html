@@ -27,7 +27,12 @@
 <span class="sd">        headers (dict): Extra headers to add on the requests</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">            SchemaVersion (nametupled): (subject, schema_id, schema, version)</span>
+<span class="sd">        SchemaVersion (nametupled): (subject, schema_id, schema, version)</span>
+
+<span class="sd">        None: If server returns a not success response:</span>
+<span class="sd">            404: Schema not found</span>
+<span class="sd">            422: Unprocessable entity</span>
+<span class="sd">            ~ (200 - 299): Not success</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 </pre></div>
 
@@ -98,7 +103,7 @@
 <span class="sd">        headers (dict): Extra headers to add on the requests</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        bool: True if compatible, False if not compatible</span>
+<span class="sd">        bool: True if schema given compatible, False otherwise</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 </pre></div>
 
@@ -135,6 +140,9 @@
 <span class="sd">        headers (dict): Extra headers to add on the requests</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        None</span>
+<span class="sd">        bool: True if compatibility was updated</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ClientError: if the request was unsuccessful or an invalid</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 </pre></div></article></div></div></main><footer class="md-footer"><div class="md-footer-nav"><nav class="md-footer-nav__inner md-grid"><a href="../faust/" title="Faust integration" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev"><div class="md-flex__cell md-flex__cell--shrink"><i class="md-icon md-icon--arrow-back md-footer-nav__button"></i></div><div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span class="md-flex__ellipsis"><span class="md-footer-nav__direction">Previous</span>Faust integration</span></div></a><a href="../exceptions/" title="Exceptions" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next"><div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span class="md-flex__ellipsis"><span class="md-footer-nav__direction">Next</span>Exceptions</span></div><div class="md-flex__cell md-flex__cell--shrink"><i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i></div></a></nav></div><div class="md-footer-meta md-typeset"><div class="md-footer-meta__inner md-grid"><div class="md-footer-copyright">powered by <a href="https://www.mkdocs.org">MkDocs</a> and <a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a></div></div></div></footer></div><script src="../assets/javascripts/application.b260a35d.js"></script><script>app.initialize({version:"1.0.4",url:{base:".."}})</script></body></html>

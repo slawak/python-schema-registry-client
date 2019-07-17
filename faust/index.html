@@ -19,10 +19,7 @@ Avro is used to define the data schema for a record's value. This schema describ
 
 <p>Let's register the custom <code>codec</code></p>
 <div class="codehilite"><pre><span></span><span class="c1"># codecs.codec.py</span>
-
-<span class="kn">from</span> <span class="nn">avro.schema</span> <span class="kn">import</span> <span class="n">SchemaFromJSONData</span>
-
-<span class="kn">from</span> <span class="nn">schema_registry.client</span> <span class="kn">import</span> <span class="n">SchemaRegistryClient</span>
+<span class="kn">from</span> <span class="nn">schema_registry.client</span> <span class="kn">import</span> <span class="n">SchemaRegistryClient</span><span class="p">,</span> <span class="n">schema</span>
 <span class="kn">from</span> <span class="nn">schema_registry.serializers</span> <span class="kn">import</span> <span class="n">FaustSerializer</span>
 
 <span class="c1"># create an instance of the `SchemaRegistryClient`</span>
@@ -30,7 +27,7 @@ Avro is used to define the data schema for a record's value. This schema describ
 
 <span class="c1"># schema that we want to use. For this example we </span>
 <span class="c1"># are using a dict, but this schema could be located in a file called avro_user_schema.avsc</span>
-<span class="n">avro_user_schema</span> <span class="o">=</span> <span class="n">SchemaFromJSONData</span><span class="p">({</span>
+<span class="n">avro_user_schema</span> <span class="o">=</span> <span class="n">schema</span><span class="o">.</span><span class="n">AvroSchema</span><span class="p">({</span>
      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;record&quot;</span><span class="p">,</span>
      <span class="s2">&quot;namespace&quot;</span><span class="p">:</span> <span class="s2">&quot;com.example&quot;</span><span class="p">,</span>
      <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;AvroUsers&quot;</span><span class="p">,</span>
