@@ -2,11 +2,11 @@
 <p>Class that serialize and deserialize messages. It interacts with the <code>SchemaRegistryClient</code> to get <code>Avro Schemas</code> in order to process messages. In your application you will intereact with it.</p>
 <h2 id="usage">Usage:</h2>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">schema_registry.client</span> <span class="kn">import</span> <span class="n">SchemaRegistryClient</span><span class="p">,</span> <span class="n">schema</span>
-<span class="kn">from</span> <span class="nn">schema_registry.serializer</span> <span class="kn">import</span> <span class="n">MessageSerializer</span>
+<span class="kn">from</span> <span class="nn">schema_registry.serializers</span> <span class="kn">import</span> <span class="n">MessageSerializer</span>
 
 <span class="n">client</span> <span class="o">=</span> <span class="n">SchemaRegistryClient</span><span class="p">(</span><span class="s2">&quot;http://127.0.0.1:8080&quot;</span><span class="p">)</span>
 
-<span class="n">message_serielizer</span> <span class="o">=</span> <span class="n">MessageSerializer</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+<span class="n">message_serializer</span> <span class="o">=</span> <span class="n">MessageSerializer</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
 
 <span class="c1"># Let&#39;s imagine that we have the foillowing schema.</span>
 <span class="n">avro_user_schema</span> <span class="o">=</span> <span class="n">schema</span><span class="o">.</span><span class="n">AvroSchema</span><span class="p">({</span>
@@ -47,10 +47,9 @@
 <span class="p">}</span>
 
 <span class="n">message_serializer</span><span class="o">.</span><span class="n">encode_record_with_schema</span><span class="p">(</span>
-    <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="n">user_schema</span><span class="p">,</span> <span class="n">bad_record</span><span class="p">)</span>
-
-<span class="c1"># Exception!!</span>
-<span class="ne">TypeError</span><span class="p">:</span> <span class="n">unsupported</span> <span class="n">operand</span> <span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span> <span class="ow">and</span> <span class="s1">&#39;int&#39;</span>
+    <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="n">avro_user_schema</span><span class="p">,</span> <span class="n">bad_record</span><span class="p">)</span>
+<span class="c1"># results in an error:</span>
+<span class="c1">#   TypeError: unsupported operand type(s) for &lt;&lt;: &#39;str&#39; and &#39;int&#39;</span>
 </pre></div>
 
 
