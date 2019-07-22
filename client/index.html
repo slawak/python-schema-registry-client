@@ -19,7 +19,7 @@
 <h2 id="methods">Methods:</h2>
 <h4 id="get-schema">Get Schema</h4>
 <p>Get Schema for a given version. If version is <code>None</code>, try to resolve the latest schema</p>
-<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_schema</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;latest&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_schema</span><span class="p">(</span><span class="n">subject</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;latest&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">utils</span><span class="o">.</span><span class="n">SchemaVersion</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Args:</span>
 <span class="sd">        subject (str): subject name</span>
@@ -27,7 +27,7 @@
 <span class="sd">        headers (dict): Extra headers to add on the requests</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        SchemaVersion (nametupled): (subject, schema_id, schema, version)</span>
+<span class="sd">        utils.SchemaVersion (nametupled): (subject, schema_id, schema, version)</span>
 
 <span class="sd">        None: If server returns a not success response:</span>
 <span class="sd">            404: Schema not found</span>
@@ -38,20 +38,20 @@
 
 
 <h4 id="get-schema-by-id">Get schema by <code>id</code>:</h4>
-<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_by_id</span><span class="p">(</span><span class="n">schema_id</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_by_id</span><span class="p">(</span><span class="n">schema_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">client</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">AvroSchema</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Args:</span>
 <span class="sd">        schema_id (int): Schema Id</span>
 <span class="sd">        headers (dict): Extra headers to add on the requests</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        avro.schema.RecordSchema: Avro Record schema</span>
+<span class="sd">        client.schema.AvroSchema: Avro Record schema</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 </pre></div>
 
 
 <p>Register a Schema:</p>
-<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">avro_schema</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="n">subject</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">avro_schema</span><span class="p">:</span> <span class="n">client</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">AvroSchema</span><span class="p">,</span> <span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Args:</span>
 <span class="sd">        subject (str): subject name</span>
@@ -64,21 +64,36 @@
 </pre></div>
 
 
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_subjects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    GET /subjects/(string: subject)</span>
+<span class="sd">    Get list of all registered subjects in your Schema Registry.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        subject (str): subject name</span>
+<span class="sd">        headers (dict): Extra headers to add on the requests</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list [str]: list of registered subjects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+
+
 <h4 id="delete-schema">Delete Schema</h4>
-<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">delete_subject</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">delete_subject</span><span class="p">(</span><span class="n">subject</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Args:</span>
 <span class="sd">        subject (str): subject name</span>
 <span class="sd">        headers (dict): Extra headers to add on the requests</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        int: version of the schema deleted under this subject</span>
+<span class="sd">        list (int): versions of the schema deleted under this subject</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 </pre></div>
 
 
 <p>Check if a schema has already been registered under the specified subject:</p>
-<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">check_version</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">avro_schema</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">check_version</span><span class="p">(</span><span class="n">subject</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">avro_schema</span><span class="p">:</span> <span class="n">client</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">AvroSchema</span><span class="p">,</span> <span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Args:</span>
 <span class="sd">        subject (str): subject name</span>
@@ -86,14 +101,59 @@
 <span class="sd">        headers (dict): Extra headers to add on the requests</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        int: Schema version</span>
+<span class="sd">        dict:</span>
+<span class="sd">            subject (string) -- Name of the subject that this schema is registered under</span>
+<span class="sd">            id (int) -- Globally unique identifier of the schema</span>
+<span class="sd">            version (int) -- Version of the returned schema</span>
+<span class="sd">            schema (dict) -- The Avro schema</span>
+
 <span class="sd">        None: If schema not found.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 </pre></div>
 
 
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_versions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subject</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    GET subjects/{subject}/versions</span>
+<span class="sd">    Get a list of versions registered under the specified subject.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        subject (str): subject name</span>
+<span class="sd">        headers (dict): Extra headers to add on the requests</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list (str): version of the schema registered under this subject</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+
+
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">delete_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subject</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;latest&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    DELETE /subjects/(string: subject)/versions/(versionId: version)</span>
+
+<span class="sd">    Deletes a specific version of the schema registered under this subject.</span>
+<span class="sd">    This only deletes the version and the schema ID remains intact making</span>
+<span class="sd">    it still possible to decode data using the schema ID.</span>
+<span class="sd">    This API is recommended to be used only in development environments or</span>
+<span class="sd">    under extreme circumstances where-in, its required to delete a previously</span>
+<span class="sd">    registered schema for compatibility purposes or re-register previously registered schema.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        subject (str): subject name</span>
+<span class="sd">        version (str): Version of the schema to be deleted. </span>
+<span class="sd">            Valid values for versionId are between [1,2^31-1] or the string &quot;latest&quot;.</span>
+<span class="sd">            &quot;latest&quot; deletes the last registered schema under the specified subject.</span>
+<span class="sd">        headers (dict): Extra headers to add on the requests</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: version of the schema deleted</span>
+<span class="sd">        None: If the subject or version does not exist.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+
+
 <h4 id="test-compatibility">Test Compatibility:</h4>
-<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">test_compatibility</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">avro_schema</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;latest&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">test_compatibility</span><span class="p">(</span><span class="n">subject</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">avro_schema</span><span class="p">:</span> <span class="n">client</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">AvroSchema</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;latest&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    By default the latest version is checked against.</span>
 
@@ -109,7 +169,7 @@
 
 
 <h4 id="get-compatibility">Get Compatibility:</h4>
-<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_compatibility</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_compatibility</span><span class="p">(</span><span class="n">subject</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the current compatibility level for a subject.  Result will be one of:</span>
 
@@ -129,7 +189,7 @@
 
 
 <h4 id="update-compatibility">Update Compatibility:</h4>
-<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">update_compatibility</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">update_compatibility</span><span class="p">(</span><span class="n">level</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">subject</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Update the compatibility level for a subject.</span>
 <span class="sd">    If subject is None, the compatibility level is global.</span>
