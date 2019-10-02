@@ -8,6 +8,10 @@ class AvroSchema:
         if isinstance(schema, str):
             schema = json.loads(schema)
         self.schema = fastavro.parse_schema(schema)
+        if isinstance(self.schema, list):
+            self._name = self.schema[-1].get("name")
+        else:
+            self._name = self.schema.get("name")
         self.generate_hash()
 
     def generate_hash(self) -> None:
@@ -15,7 +19,7 @@ class AvroSchema:
 
     @property
     def name(self) -> str:
-        return self.schema.get("name")
+        return self._name
 
     def __hash__(self) -> int:
         return self._hash
